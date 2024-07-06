@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_state_management/add_todo_page.dart';
-import 'package:flutter_bloc_state_management/cubit/todo_cubit.dart';
-import 'package:flutter_bloc_state_management/todo_list.dart';
+import 'package:flutter_bloc_state_management/app_bloc_observer.dart';
+import 'package:flutter_bloc_state_management/bloc/auth_bloc.dart';
+import 'package:flutter_bloc_state_management/login_screen.dart';
+import 'package:flutter_bloc_state_management/palette';
 
 void main() {
-  runApp(
-    BlocProvider(
-      create: (context) => TodoCubit(),
-      child: const MyApp(),
-    ),
-  );
+  Bloc.observer = AppBlocObserver();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -18,18 +15,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return BlocProvider(
+      create: (context) => AuthBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: Pallete.backgroundColor,
+        ),
+        home: const LoginScreen(),
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (_) => const TodoList(),
-        '/add-todo': (_) => const AddTodoPage(),
-      },
     );
   }
 }
